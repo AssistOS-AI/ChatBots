@@ -1,0 +1,20 @@
+{
+  "bots": [
+    {
+      "personalityId": "",
+      "currentConversationId": "",
+      "conversations": [
+        {
+          "id": "",
+          "history": [],
+          "context": [],
+          "currentEmotion": {
+            "name": "",
+            "emoji": ""
+          },
+          "lastInteraction": "date"
+        }
+      ]
+    }
+  ]
+}

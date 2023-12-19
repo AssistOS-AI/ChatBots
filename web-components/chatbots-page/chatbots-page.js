@@ -140,4 +140,9 @@ export class chatbotsPage {
         target.style.display = "none";
         controller.abort();
     };
+
+    //move this to a service
+    addReply(){
+
+    }
 }
