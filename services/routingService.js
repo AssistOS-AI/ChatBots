@@ -3,7 +3,7 @@ export class routingService {
         this.appName = "ChatBots";
     }
     async navigateToLocation(locationArray) {
-        if (locationArray[0] !== "chatbots-select-personality-page" || locationArray[0] !== "personality") {
+        if (locationArray[0] !== "chatbots-select-personality-page" && locationArray[0] !== "personality") {
             console.error("Invalid URL structure.");
             return;
         }
