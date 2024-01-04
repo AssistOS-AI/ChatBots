@@ -1,3 +1,5 @@
+import {getBasePath} from "../../utils/index.js";
+
 export class chatbotsSelectPersonalityPage {
     constructor(element,invalidate) {
         this.element = element;
@@ -18,6 +20,6 @@ export class chatbotsSelectPersonalityPage {
     async selectPersonality(_target){
         let personality = webSkel.UtilsService.reverseQuerySelector(_target,"personality-unit");
         let personalityId = personality.getAttribute("data-id");
-        await webSkel.changeToDynamicPage("chatbots-page", `chatbots-page/${personalityId}`);
+        await webSkel.changeToDynamicPage("chatbots-page", `${getBasePath()}/personality/${personalityId}/chatbots-page`);
     }
 }

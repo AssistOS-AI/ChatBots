@@ -39,6 +39,12 @@
       "presenterName": "chatbotsSelectPersonalityPage",
       "forComponent": "chatbots-select-personality-page"
     }
+  ],
+  "services": [
+    {
+      "serviceName": "routingService",
+      "servicePath": "services/routingService.js"
+    }
   ]
 }
 
