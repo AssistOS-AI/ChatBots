@@ -1,14 +1,17 @@
 export class routingService {
-    constructor() {
-        this.appName = "ChatBots";
-    }
-    async navigateToLocation(locationArray) {
-        if (locationArray[0] !== "chatbots-select-personality-page" && locationArray[0] !== "personality") {
-            console.error("Invalid URL structure.");
+    constructor() {}
+    async navigateToLocation(locationArray = [], appName) {
+        const CHATBOTS_PAGE = "chatbots-select-personality-page";
+        const PERSONALITY_PAGE = "personality";
+
+        // Validate the first segment of locationArray
+        if (locationArray.length === 0 || (locationArray[0] !== CHATBOTS_PAGE && locationArray[0] !== PERSONALITY_PAGE)) {
+            console.error("Invalid URL structure: URL must start with 'chatbots-select-personality-page' or 'personality'");
             return;
         }
+
         const webComponentName = locationArray[locationArray.length - 1];
-        const pageUrl = `${webSkel.currentUser.space.id}/${this.appName}/${locationArray.join("/")}`;
+        const pageUrl = `${webSkel.currentUser.space.id}/${appName}/${locationArray.join("/")}`;
         await webSkel.changeToDynamicPage(webComponentName, pageUrl);
     }
 }
