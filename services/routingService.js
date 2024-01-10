@@ -4,9 +4,14 @@ export class routingService {
         const CHATBOTS_PAGE = "chatbots-select-personality-page";
         const PERSONALITY_PAGE = "personality";
 
-        // Validate the first segment of locationArray
-        if (locationArray.length === 0 || (locationArray[0] !== CHATBOTS_PAGE && locationArray[0] !== PERSONALITY_PAGE)) {
-            console.error("Invalid URL structure: URL must start with 'chatbots-select-personality-page' or 'personality'");
+        
+        if (locationArray.length === 0 || locationArray[0] === CHATBOTS_PAGE) {
+            const pageUrl = `${webSkel.currentUser.space.id}/${appName}/${CHATBOTS_PAGE}`;
+            await webSkel.changeToDynamicPage(CHATBOTS_PAGE, pageUrl);
+            return;
+        }
+        if(locationArray[locationArray.length-1]!== PERSONALITY_PAGE){
+         console.error(`Invalid URL: URL must end with ${CHATBOTS_PAGE} or ${PERSONALITY_PAGE}`);
             return;
         }
 
