@@ -8,7 +8,7 @@ export class Manager {
         this.app = webSkel.currentUser.space.getApplicationByName(appName);
         this.services = new Map();
         this.services.set('routingService', new routingService());
-        this.services.set('HistoryService', new ChatbotService());
+        this.services.set('ChatbotService', new ChatbotService());
     }
     async navigateToLocation(location) {
         this.services.get('routingService').navigateToLocation(location, this.app.name);

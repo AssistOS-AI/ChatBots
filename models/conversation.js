@@ -5,6 +5,8 @@ export class Conversation{
         this.context = conversationData.context || [];
         this.wordCount = conversationData.wordCount || 0;
         this.currentEmotion = conversationData.currentEmotion || {name:". . .", emoji:"&#128578;"};
-        this.lastInteraction = conversationData.lastInteraction || "";
+        this.lastInteraction = conversationData.lastInteraction || new Date();
+        this.creationDate = conversationData.creationDate || new Date();
     }
+
 }

@@ -20,8 +20,9 @@ export class chatbotsPage {
 
     }
     beforeRender() {
+        let conversation =  this.appManager.services.get("ChatbotService").initChatbot(this.appManager, this.personalityId);
         let stringHTML = "";
-        for(let reply of this.cachedHistory){
+        for(let reply of conversation.history){
             if(reply.role === "user"){
                 stringHTML += `
                 <div class="chat-box-container user">
