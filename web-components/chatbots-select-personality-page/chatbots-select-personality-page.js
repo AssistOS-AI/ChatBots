@@ -2,6 +2,8 @@ import {getBasePath} from "../../utils/index.js";
 
 export class chatbotsSelectPersonalityPage {
     constructor(element,invalidate) {
+        let appName = window.location.hash.split('/')[1];
+        this.appManager = webSkel.initialisedApplications[appName].manager;
         this.element = element;
         this.invalidate=invalidate;
         this.invalidate();

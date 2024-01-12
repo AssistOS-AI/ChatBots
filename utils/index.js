@@ -4,7 +4,8 @@ export function parseURL() {
     return personalityId;
 }
 export function getAppName(){
-    return 'ChatBots';
+    let url = window.location.hash.split('/');
+    return url[1];
 }
 export function getBasePath(){
     return `${webSkel.currentUser.space.id}`+`/`+`${getAppName()}`;
