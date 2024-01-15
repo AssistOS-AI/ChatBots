@@ -9,6 +9,7 @@ export class chatbotsPage {
         this.cachedHistory = [];
         this.incognito = false;
         this.incognitoConversation = {history:[],currentEmotion:{name:". . .",emoji:"&#128578;"}};
+        this.defaultEmotion = {name:". . .",emoji:"&#128578;"};
     }
     beforeRender() {
         this.chatbot = this.appManager.getChatbot(this.personalityId);
@@ -128,14 +129,26 @@ export class chatbotsPage {
       this.history.push(response.responseJson.summary[0]);
       this.history.push(response.responseJson.summary[1]);
     }
+
+    async storeConversationData(role, text, emotion){
+        if(this.incognito){
+            this.incognitoConversation.history.push({role:role, content:text});
+            this.incognitoConversation.currentEmotion = emotion;
+        }
+        else {
+            this.conversation.setCurrentEmotion(emotion);
+            await this.chatbot.addMessage(this.conversation, role, text);
+        }
+    }
     async sendMessage(_target){
         let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
         let input = formInfo.data.input;
         formInfo.elements.input.element.value = "";
-        this.conversation.setCurrentEmotion(this.defaultEmotion);
-        this.chatbot.addMessage(this.conversation, "user", input);
+        await this.storeConversationData("user", input, this.defaultEmotion);
+
         this.displayEmotion(this.defaultEmotion);
         this.displayMessage("user",input);
+
         let flowId = webSkel.currentUser.space.getFlowIdByName("Chatbots");
         //await this.summarizeConversation();
         let response = await webSkel.getService("LlmsService").callFlow(flowId, this.chatbot, this.conversation, formInfo.data.input, this.personalityId, this.conversation.history);
@@ -146,8 +159,7 @@ export class chatbotsPage {
                 emotion:{name:"Confused",emoji:"&#128533;"}
             };
         }
-        this.conversation.setCurrentEmotion(response.responseJson.emotion);
-        this.chatbot.addMessage(this.conversation, "assistant", response.responseJson.reply);
+        await this.storeConversationData("assistant", response.responseJson.reply, response.responseJson.emotion);
         this.displayEmotion(response.responseJson.emotion);
         this.displayMessage("assistant", response.responseJson.reply);
 
@@ -172,11 +184,13 @@ export class chatbotsPage {
     async createConversation(){
         this.chatbot.currentConversationId = await this.chatbot.addConversation();
         this.invalidate();
+        this.incognito = false;
     }
 
     setCurrentConversation(_target){
         this.chatbot.currentConversationId = _target.getAttribute("data-id");
         this.invalidate();
+        this.incognito = false;
     }
     createIncognitoConversation(){
         this.incognito = true;
