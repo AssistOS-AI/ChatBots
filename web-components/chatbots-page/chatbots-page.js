@@ -12,11 +12,11 @@ export class chatbotsPage {
         this.defaultEmotion = {name:". . .",emoji:"&#128578;"};
     }
     beforeRender() {
+        this.conversation =  this.appManager.services.get("ChatbotService").initChatbot(this.appManager, this.personalityId);
         this.chatbot = this.appManager.getChatbot(this.personalityId);
         if(this.incognito){
             this.buildCurrentConversation(this.incognitoConversation);
         }else {
-            this.conversation =  this.appManager.services.get("ChatbotService").initChatbot(this.appManager, this.personalityId);
             this.buildCurrentConversation(this.conversation);
         }
         this.buildConversationUnits();

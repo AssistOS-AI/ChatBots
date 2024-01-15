@@ -170,7 +170,7 @@ chatbots-page{
     background: none;
     border-radius: 10px;
     border: 0.5px solid var(--very-light-gray);
-    color: var(--left-sidebar);
+    color: var(--medium-blue);
     font-size: 18px;
     font-weight: 600;
 }
@@ -178,7 +178,7 @@ chatbots-page{
     padding: 15px;
     cursor: pointer;
     width: 100%;
-    background-color: var(--left-sidebar);
+    background-color: var(--medium-blue);
     font-size: 18px;
     font-weight: 600;
     border-radius: 10px;
@@ -197,7 +197,14 @@ chatbots-page{
     right: 0;
 }
 .header{
+    padding: 10px;
     display: flex;
+}
+.header-name{
+    color: var(--medium-blue);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 48px;
 }
 .conversation-unit{
     cursor: pointer;
