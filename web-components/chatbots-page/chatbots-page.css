@@ -199,3 +199,6 @@ chatbots-page{
 .header{
     display: flex;
 }
+.conversation-unit{
+    cursor: pointer;
+}

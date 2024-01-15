@@ -20,4 +20,8 @@ export class Manager {
             this.app.bots.push(new Chatbot(botData));
         }
     }
+    getChatbot(personalityId){
+        let chatbot = this.app.bots.find((bot) => bot.personalityId === personalityId);
+        return chatbot || console.error(`Chatbot not found, personalityId: ${personalityId}`);
+    }
 }

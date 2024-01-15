@@ -7,20 +7,21 @@ export class chatbotsPage {
         let appName = window.location.hash.split('/')[1];
         this.appManager = webSkel.initialisedApplications[appName].manager;
         this.cachedHistory = [];
-        // this.history = [
-        // {role: 'user', content: 'hello'},
-        // {role: 'assistant', content: 'Hello! How can I assist you today?'},
-        // {role: 'user', content: 'do you know the band tool?'},
-        // {role: 'assistant', content: 'Yes, I am familiar with the band Tool. They are a …r your thoughts and experiences with their music!'}];
-        // this.cachedHistory = this.history;
-        // this.cachedEmotion = {name:"Excitement",emoji:"🎉"}
-        this.history = [];
-        this.defaultEmotion = {name:". . .",emoji:"&#128578;"}
-        this.storedEmotion = null || this.defaultEmotion;
-
+        this.incognito = false;
+        this.incognitoConversation = {history:[],currentEmotion:{name:". . .",emoji:"&#128578;"}};
     }
     beforeRender() {
-        let conversation =  this.appManager.services.get("ChatbotService").initChatbot(this.appManager, this.personalityId);
+        this.chatbot = this.appManager.getChatbot(this.personalityId);
+        if(this.incognito){
+            this.buildCurrentConversation(this.incognitoConversation);
+        }else {
+            this.conversation =  this.appManager.services.get("ChatbotService").initChatbot(this.appManager, this.personalityId);
+            this.buildCurrentConversation(this.conversation);
+        }
+        this.buildConversationUnits();
+    }
+
+    buildCurrentConversation(conversation){
         let stringHTML = "";
         for(let reply of conversation.history){
             if(reply.role === "user"){
@@ -28,7 +29,7 @@ export class chatbotsPage {
                 <div class="chat-box-container user">
                  <div class="chat-box user-box">${reply.content}</div>
                 </div>`;
-            }else {
+            }else if(reply.role === "assistant"){
                 stringHTML += `
                 <div class="chat-box-container robot">
                  <div class="chat-box robot-box">${reply.content}</div>
@@ -37,8 +38,31 @@ export class chatbotsPage {
         }
         this.conversationHistory = stringHTML;
         this.savedEmotion = `
-             <div class="emotion-emoticon">${this.storedEmotion.emoji}</div>
-             <div class="emotion-name">${this.storedEmotion.name}</div>`;
+             <div class="emotion-emoticon">${conversation.currentEmotion.emoji}</div>
+             <div class="emotion-name">${conversation.currentEmotion.name}</div>`;
+    }
+    buildConversationUnits(){
+        let string = "";
+        let currentConversationId;
+        if(!this.incognito){
+            currentConversationId = this.conversation.id;
+        }
+        for(let conversation of this.chatbot.conversations){
+            if(conversation.id !== currentConversationId){
+                let preview;
+                if(conversation.history[0]){
+                    preview = conversation.history[0].content;
+                }else {
+                    preview = "New chat"
+                }
+                string += `
+                <div class="conversation-unit" data-local-action="setCurrentConversation" data-id="${conversation.id}">
+                    <div>${preview}</div>
+                    <div>${conversation.creationDate}</div>
+                </div>`
+            }
+        }
+        this.otherConversations = string;
     }
     preventRefreshOnEnter(event){
       if(event.key === "Enter" && !event.ctrlKey){
@@ -50,7 +74,7 @@ export class chatbotsPage {
       }
     }
     afterRender(){
-        this.conversation = this.element.querySelector(".conversation");
+        this.chatbox = this.element.querySelector(".conversation");
         this.emotionContainer = this.element.querySelector(".emotion");
         this.userInput = this.element.querySelector("#input");
         this.userInput.removeEventListener("keypress", this.boundFn);
@@ -59,21 +83,20 @@ export class chatbotsPage {
     }
     displayMessage(role, text){
         let reply;
-        this.cachedHistory.push({role:role,content: text})
         if(role === "user"){
             reply = `
                 <div class="chat-box-container user">
                  <div class="chat-box user-box">${text}</div>
                 </div>`;
 
-        }else {
+        }else if(role === "assistant"){
             reply = `
                 <div class="chat-box-container robot">
                  <div class="chat-box robot-box">${text}</div>
                 </div>`;
         }
-        this.conversation.insertAdjacentHTML("beforeend", reply);
-        const lastReplyElement = this.conversation.lastElementChild;
+        this.chatbox.insertAdjacentHTML("beforeend", reply);
+        const lastReplyElement = this.chatbox.lastElementChild;
         lastReplyElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
     }
 
@@ -109,22 +132,25 @@ export class chatbotsPage {
         let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
         let input = formInfo.data.input;
         formInfo.elements.input.element.value = "";
-        this.displayMessage("user",input);
+        this.conversation.setCurrentEmotion(this.defaultEmotion);
+        this.chatbot.addMessage(this.conversation, "user", input);
         this.displayEmotion(this.defaultEmotion);
+        this.displayMessage("user",input);
         let flowId = webSkel.currentUser.space.getFlowIdByName("Chatbots");
-        await this.summarizeConversation();
-        let response = await webSkel.getService("LlmsService").callFlow(flowId, formInfo.data.input, this.personalityId, this.history);
+        //await this.summarizeConversation();
+        let response = await webSkel.getService("LlmsService").callFlow(flowId, this.chatbot, this.conversation, formInfo.data.input, this.personalityId, this.conversation.history);
 
-        this.history.push({role:"user",content:input});
         if(!response.responseJson){
             response.responseJson = {
                 reply:"I'm sorry, I didn't understand what you said. Please repeat.",
                 emotion:{name:"Confused",emoji:"&#128533;"}
             };
         }
-        this.history.push({role:"assistant",content:response.responseJson.reply});
-        this.displayMessage("assistant", response.responseJson.reply);
+        this.conversation.setCurrentEmotion(response.responseJson.emotion);
+        this.chatbot.addMessage(this.conversation, "assistant", response.responseJson.reply);
         this.displayEmotion(response.responseJson.emotion);
+        this.displayMessage("assistant", response.responseJson.reply);
+
     }
 
     showHistory(_target, mode){
@@ -142,4 +168,18 @@ export class chatbotsPage {
         target.style.display = "none";
         controller.abort();
     };
+
+    async createConversation(){
+        this.chatbot.currentConversationId = await this.chatbot.addConversation();
+        this.invalidate();
+    }
+
+    setCurrentConversation(_target){
+        this.chatbot.currentConversationId = _target.getAttribute("data-id");
+        this.invalidate();
+    }
+    createIncognitoConversation(){
+        this.incognito = true;
+        this.invalidate();
+    }
 }

@@ -22,16 +22,16 @@
         $$savedEmotion
     </div>
     <div class="history-section">
-        <button class="new-chat">New Chat</button>
-        <button class="new-chat">New Incognito Chat</button>
+        <button class="new-chat" data-local-action="createConversation">New Chat</button>
+        <button class="new-chat" data-local-action="createIncognitoConversation">New Incognito Chat</button>
         <button class="history-btn" data-local-action="showHistory off">History</button>
         <div class="history">
             <div class="header">
                 <div class="header-name">History</div>
-                <button class="new-chat">New Chat</button>
+                <button class="new-chat" data-local-action="createConversation">New Chat</button>
             </div>
             <div class="content">
-
+                $$otherConversations
             </div>
         </div>
     </div>
