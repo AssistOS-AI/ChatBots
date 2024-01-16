@@ -47,22 +47,73 @@ export class chatbotsPage {
         if(!this.incognito){
             currentConversationId = this.conversation.id;
         }
-        for(let conversation of this.chatbot.conversations){
-            if(conversation.id !== currentConversationId){
+        let conversationPreviews = this.chatbot.conversations
+            .filter((conv) => conv.id !== currentConversationId)
+            .map((conv) => {
                 let preview;
-                if(conversation.history[0]){
-                    preview = conversation.history[0].content;
-                }else {
-                    preview = "New chat"
+                if (conv.history[1]) {
+                    preview = conv.history[1].content;
+                } else {
+                    preview = "New chat";
                 }
+                return { preview: preview, date: conv.creationDate, id: conv.id };
+            });
+
+        const cat1 = "Today", cat2 = "Yesterday", cat3 =
+                "Last week", cat4 = "Last month", cat5 = "A year ago", cat6 = "2 years ago", cat7 = "More than 3 years ago";
+            let categories = {
+            [cat1]: [],
+            [cat2]: [],
+            [cat3]: [],
+            [cat4]: [],
+            [cat5]: [],
+            [cat6]: [],
+            [cat7]: [],
+        }
+        for(let convo of conversationPreviews){
+            const today = new Date();
+            const eventDate = new Date(convo.date);
+
+            const timeDiff = today - eventDate;
+            const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const yearsDiff = Math.floor(daysDiff / 365);
+
+            if (daysDiff === 0) {
+                categories[cat1].push(convo);
+            } else if (daysDiff === 1) {
+                categories[cat2].push(convo);
+            } else if (daysDiff <= 7) {
+                categories[cat3].push(convo);
+            } else if (daysDiff <= 30) {
+                categories[cat4].push(convo);
+            } else if (yearsDiff === 1) {
+                categories[cat5].push(convo);
+            } else if (yearsDiff === 2) {
+                categories[cat6].push(convo);
+            } else {
+                categories[cat7].push(convo);
+            }
+        }
+        for(let [category, conversations] of Object.entries(categories)){
+            if(categories[category].length !== 0){
                 string += `
-                <div class="conversation-unit" data-local-action="setCurrentConversation" data-id="${conversation.id}">
-                    <div>${preview}</div>
-                    <div>${conversation.creationDate}</div>
-                </div>`
+                <div>
+                     <div class="creation-date">${category}</div>
+                     ${this.createPreviews(conversations)}
+                </div>`;
             }
         }
         this.otherConversations = string;
+    }
+    createPreviews(conversations){
+        let string = "";
+        for(let convo of conversations){
+            string += `
+                <div class="conversation-unit" data-local-action="setCurrentConversation" data-id="${convo.id}">
+                     ${convo.preview}
+                </div>`;
+        }
+        return string;
     }
     preventRefreshOnEnter(event){
       if(event.key === "Enter" && !event.ctrlKey){

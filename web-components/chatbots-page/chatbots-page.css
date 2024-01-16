@@ -197,15 +197,51 @@ chatbots-page{
     right: 0;
 }
 .header{
-    padding: 10px;
+    height: 30%;
+    padding: 5px 10px 5px 10px;
     display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--gray-border);
 }
 .header-name{
+    display: inline-block;
     color: var(--medium-blue);
     font-size: 28px;
     font-weight: 600;
-    line-height: 48px;
 }
 .conversation-unit{
     cursor: pointer;
+}
+.history-new-chat{
+    margin: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--medium-blue);
+    border: 0.5px solid var(--very-light-gray);
+    padding: 6px 10px;
+    cursor: pointer;
+    color: white;
+    border-radius: 10px;
+}
+.conversation-unit{
+    padding: 10px;
+}
+.preview{
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--left-sidebar);
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration-line: underline;
+}
+.creation-date{
+    color: var(--chatbots-history-blue);
+    font-size: 16px;
+    font-weight: 600;
+}
+.content{
+    height: 70%;
+    overflow-y: scroll;
 }
