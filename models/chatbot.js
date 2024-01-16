@@ -50,4 +50,9 @@ export class Chatbot{
         conversation.addMessage(role, text);
         await storageManager.storeAppObject(webSkel.currentApplicationName, "data", this.getFileName(), JSON.stringify(this));
     }
+
+    async addContext(conversation, context){
+        conversation.addContext(context);
+        await storageManager.storeAppObject(webSkel.currentApplicationName, "data", this.getFileName(), JSON.stringify(this));
+    }
 }

@@ -6,7 +6,6 @@ export class chatbotsPage {
         this.personalityId = webSkel.getService("UtilsService").parseURL();
         let appName = window.location.hash.split('/')[1];
         this.appManager = webSkel.initialisedApplications[appName].manager;
-        this.cachedHistory = [];
         this.incognito = false;
         this.incognitoConversation = {history:[],currentEmotion:{name:". . .",emoji:"&#128578;"}};
         this.defaultEmotion = {name:". . .",emoji:"&#128578;"};
@@ -115,20 +114,6 @@ export class chatbotsPage {
             this.emotionContainer.classList.add("fade-in");
         },500);
     }
-    async summarizeConversation(){
-        let count = 0;
-        for(let reply of this.history){
-            count+= reply.content.length;
-        }
-        if(count < 500){
-            return;
-        }
-      let flowId = webSkel.currentUser.space.getFlowIdByName("SummarizeConversation");
-      let response = await webSkel.getService("LlmsService").callFlow(flowId, JSON.stringify(this.history));
-      this.history = [];
-      this.history.push(response.responseJson.summary[0]);
-      this.history.push(response.responseJson.summary[1]);
-    }
 
     async storeConversationData(role, text, emotion){
         if(this.incognito){
@@ -144,14 +129,12 @@ export class chatbotsPage {
         let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
         let input = formInfo.data.input;
         formInfo.elements.input.element.value = "";
-        await this.storeConversationData("user", input, this.defaultEmotion);
 
         this.displayEmotion(this.defaultEmotion);
         this.displayMessage("user",input);
-
         let flowId = webSkel.currentUser.space.getFlowIdByName("Chatbots");
-        //await this.summarizeConversation();
-        let response = await webSkel.getService("LlmsService").callFlow(flowId, this.chatbot, this.conversation, formInfo.data.input, this.personalityId, this.conversation.history);
+
+        let response = await webSkel.getService("LlmsService").callFlow(flowId, this.chatbot, this.conversation, formInfo.data.input, this.defaultEmotion, this.personalityId, this.conversation.getContext());
 
         if(!response.responseJson){
             response.responseJson = {
@@ -160,6 +143,7 @@ export class chatbotsPage {
             };
         }
         await this.storeConversationData("assistant", response.responseJson.reply, response.responseJson.emotion);
+        await this.appManager.services.get("ChatbotService").summarizeConversation(this.chatbot, this.conversation);
         this.displayEmotion(response.responseJson.emotion);
         this.displayMessage("assistant", response.responseJson.reply);
 

@@ -7,9 +7,13 @@ export class Conversation{
         this.currentEmotion = conversationData.currentEmotion || {name:". . .", emoji:"&#128578;"};
         this.lastInteraction = conversationData.lastInteraction || new Date();
         this.creationDate = conversationData.creationDate || new Date();
+        this.isInstructed = conversationData.isInstructed;
     }
 
     async addMessage(role, content){
+        if(role === "system" && !this.isInstructed){
+            this.isInstructed = true;
+        }
         if(!["assistant","user","system"].includes(role)){
             console.error(`Chatbot history: role must be either assistant, user or system. Message: ${content}`);
         }
@@ -22,21 +26,17 @@ export class Conversation{
         this.history = [];
         this.wordCount = 0;
         this.context= [];
-        this.capabilities = [];
         await storageManager.storeObject(webSkel.currentUser.space.id, "status", "status", JSON.stringify(webSkel.currentUser.space.getSpaceStatus(),null,2));
     }
 
-    async setContext(context){
-        this.context[0] = {role:"system", content: context};
-        let words = context.split(" ");
-        this.wordCount = words.length;
-        await storageManager.storeObject(webSkel.currentUser.space.id, "status", "status", JSON.stringify(webSkel.currentUser.space.getSpaceStatus(),null,2));
+    async addContext(context){
+        this.context.push({role:"system", content: context});
     }
     getContext(){
-        if(this.context.length > 0){
+        if(this.context.length > 1){
             return this.context;
         }else {
-            return this.conversationHistory;
+            return this.history;
         }
     }
 
