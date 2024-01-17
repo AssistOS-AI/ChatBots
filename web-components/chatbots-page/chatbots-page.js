@@ -250,14 +250,17 @@ export class chatbotsPage {
         let target = parentTarget.querySelector(".conversation-units");
         let arrow = parentTarget.querySelector("svg");
         let creationDateContainer = parentTarget.querySelector(".creation-date-container");
+        let date = parentTarget.querySelector(".creation-date");
         if(mode === "on"){
             target.style.display = "none";
             creationDateContainer.setAttribute("data-local-action", "toggleConversations off");
             arrow.classList.remove("rotated");
+            date.style.color = "var(--chatbots-history-blue)";
         }else {
             target.style.display = "block";
             creationDateContainer.setAttribute("data-local-action", "toggleConversations on");
             arrow.classList.add("rotated");
+            date.style.color = "var(--bright-blue)";
         }
     }
 }
