@@ -186,7 +186,8 @@ chatbots-page{
     border: 0.5px solid var(--very-light-gray);
 }
 .history{
-    border: 1px solid var(--very-light-gray);
+    box-shadow: 0 1px 4px 0 rgba(9, 1, 49, 0.09);
+    border: 1px solid var(--blue-border);
     border-radius: 10px;
     background: white;
     display: none;
@@ -198,10 +199,13 @@ chatbots-page{
 }
 .header{
     height: 30%;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 10px 0 10px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid var(--gray-border);
+}
+.history-header-separator{
+    border: 0.5px solid var(--gray-border);
+    margin-top: 0;
 }
 .header-name{
     display: inline-block;
@@ -209,9 +213,7 @@ chatbots-page{
     font-size: 28px;
     font-weight: 600;
 }
-.conversation-unit{
-    cursor: pointer;
-}
+
 .history-new-chat{
     margin: 10px;
     font-size: 13px;
@@ -223,11 +225,11 @@ chatbots-page{
     color: white;
     border-radius: 10px;
 }
-.conversation-unit{
-    padding: 10px;
+.conversation-units{
+    display: none;
 }
-.preview{
-    width: 100%;
+.conversation-unit{
+    padding-left: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -235,8 +237,16 @@ chatbots-page{
     font-size: 20px;
     font-weight: 600;
     text-decoration-line: underline;
+    display: inline-block;
+}
+.creation-date-container{
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 .creation-date{
+    margin-right: 10px;
     color: var(--chatbots-history-blue);
     font-size: 16px;
     font-weight: 600;
@@ -244,4 +254,7 @@ chatbots-page{
 .content{
     height: 70%;
     overflow-y: scroll;
+}
+.rotated{
+    transform: rotate(-90deg);
 }

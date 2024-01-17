@@ -60,7 +60,7 @@ export class chatbotsPage {
             });
 
         const cat1 = "Today", cat2 = "Yesterday", cat3 =
-                "Last week", cat4 = "Last month", cat5 = "A year ago", cat6 = "2 years ago", cat7 = "More than 3 years ago";
+                "Last week", cat4 = "Last month", cat5 = "Last year", cat6 = "Last 2 years", cat7 = "More than 3 years ago";
             let categories = {
             [cat1]: [],
             [cat2]: [],
@@ -76,7 +76,6 @@ export class chatbotsPage {
 
             const timeDiff = today - eventDate;
             const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-            const yearsDiff = Math.floor(daysDiff / 365);
 
             if (daysDiff === 0) {
                 categories[cat1].push(convo);
@@ -86,9 +85,9 @@ export class chatbotsPage {
                 categories[cat3].push(convo);
             } else if (daysDiff <= 30) {
                 categories[cat4].push(convo);
-            } else if (yearsDiff === 1) {
+            } else if (daysDiff <= 365) {
                 categories[cat5].push(convo);
-            } else if (yearsDiff === 2) {
+            } else if (daysDiff <= 730) {
                 categories[cat6].push(convo);
             } else {
                 categories[cat7].push(convo);
@@ -97,9 +96,15 @@ export class chatbotsPage {
         for(let [category, conversations] of Object.entries(categories)){
             if(categories[category].length !== 0){
                 string += `
-                <div>
-                     <div class="creation-date">${category}</div>
-                     ${this.createPreviews(conversations)}
+                <div class="category">
+                    <div class="creation-date-container" data-local-action="toggleConversations">
+                    <div class="creation-date">${category}</div>
+                    <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.66031 1.65239L9.56245 1.42234C9.69146 1.36746 9.83014 1.33743 9.97065 1.33366C10.1112 1.32988 10.2513 1.35242 10.3832 1.40021C10.5151 1.44801 10.6366 1.5203 10.7404 1.61354C10.8443 1.7068 10.9286 1.81928 10.9878 1.94493L10.7617 2.05152L10.9878 1.94493C11.0471 2.07062 11.0799 2.20669 11.084 2.34528C11.0882 2.48388 11.0635 2.62162 11.0117 2.75049C10.96 2.87932 10.8824 2.99636 10.7841 3.09526C10.784 3.09527 10.784 3.09529 10.784 3.0953L4.41596 9.50014L10.783 15.9055C10.8829 16.0036 10.9621 16.1203 11.0154 16.2492C11.069 16.3786 11.0951 16.5174 11.0919 16.6572C11.0887 16.797 11.0562 16.9344 10.9969 17.0614C10.9376 17.1883 10.8527 17.3019 10.7479 17.3959C10.6431 17.4899 10.5204 17.5626 10.3872 17.6103C10.254 17.658 10.1125 17.68 9.97077 17.6752C9.82909 17.6705 9.68946 17.639 9.55994 17.5823C9.43095 17.5259 9.31417 17.4454 9.21666 17.3449L2.13457 10.2203L2.13447 10.2202L2.31177 10.044C2.16549 9.897 2.08398 9.7024 2.08398 9.50012C2.08398 9.29784 2.16549 9.10323 2.31177 8.95624L9.66031 1.65239ZM9.66031 1.65239L9.56245 1.42234C9.43342 1.47722 9.31621 1.55606 9.21786 1.65493L9.21781 1.65498L2.13457 8.77989M9.66031 1.65239L2.13457 8.77989M2.13457 8.77989C2.13454 8.77992 2.13451 8.77995 2.13448 8.77998L2.13457 8.77989Z" fill="#6F95B4" stroke="#6F95B4" stroke-width="0.5"/>
+                    </svg>
+
+                    </div>
+                     <div class="conversation-units">${this.createPreviews(conversations)}</div>
                 </div>`;
             }
         }
@@ -109,8 +114,8 @@ export class chatbotsPage {
         let string = "";
         for(let convo of conversations){
             string += `
-                <div class="conversation-unit" data-local-action="setCurrentConversation" data-id="${convo.id}">
-                     ${convo.preview}
+                <div>
+                     <div class="conversation-unit" data-local-action="setCurrentConversation" data-id="${convo.id}">${convo.preview}</div>
                 </div>`;
         }
         return string;
@@ -205,30 +210,54 @@ export class chatbotsPage {
             let target = this.element.querySelector(".history");
             target.style.display = "block";
             let controller = new AbortController();
-            document.addEventListener("click",this.hideHistory.bind(this,controller, _target), {signal:controller.signal});
+            this.bindedHideHistory = this.hideHistory.bind(this, controller, _target);
+            document.addEventListener("click", this.bindedHideHistory, {signal:controller.signal});
             _target.setAttribute("data-local-action", "showHistory on");
+            let recentConversations = this.element.querySelector(".creation-date-container");
+            recentConversations.click();
         }
     }
-    hideHistory(controller, arrow, event) {
-        arrow.setAttribute("data-local-action", "showHistory off");
+    hideHistory(controller, button, event) {
         let target = this.element.querySelector(".history");
-        target.style.display = "none";
-        controller.abort();
+        if(!target.contains(event.target)){
+            button.setAttribute("data-local-action", "showHistory off");
+            target.style.display = "none";
+            controller.abort();
+        }
     };
 
     async createConversation(){
         this.chatbot.currentConversationId = await this.chatbot.addConversation();
         this.invalidate();
+        document.removeEventListener("click", this.bindedHideHistory);
         this.incognito = false;
     }
 
     setCurrentConversation(_target){
         this.chatbot.currentConversationId = _target.getAttribute("data-id");
         this.invalidate();
+        document.removeEventListener("click", this.bindedHideHistory);
         this.incognito = false;
     }
     createIncognitoConversation(){
         this.incognito = true;
         this.invalidate();
+        document.removeEventListener("click", this.bindedHideHistory);
+    }
+
+    toggleConversations(_target, mode){
+        let parentTarget = webSkel.UtilsService.getClosestParentElement(_target, ".category");
+        let target = parentTarget.querySelector(".conversation-units");
+        let arrow = parentTarget.querySelector("svg");
+        let creationDateContainer = parentTarget.querySelector(".creation-date-container");
+        if(mode === "on"){
+            target.style.display = "none";
+            creationDateContainer.setAttribute("data-local-action", "toggleConversations off");
+            arrow.classList.remove("rotated");
+        }else {
+            target.style.display = "block";
+            creationDateContainer.setAttribute("data-local-action", "toggleConversations on");
+            arrow.classList.add("rotated");
+        }
     }
 }
