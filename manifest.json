@@ -8,9 +8,7 @@
       "componentName": "chatbots-select-personality-page",
       "componentPath": "web-components/chatbots-select-personality-page/chatbots-select-personality-page.html",
       "cssPaths": [
-        "web-components/chatbots-select-personality-page/chatbots-select-personality-page.css",
-        "web-components/chatbots-page/chatbots-page.css",
-        "web-components/personality-unit/personality-unit.css"
+        "web-components/chatbots-select-personality-page/chatbots-select-personality-page.css"
       ]
     },
     {
