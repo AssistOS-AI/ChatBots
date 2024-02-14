@@ -42,7 +42,7 @@ export class Chatbot{
     async createOpener(){
         let message = "Hello!";
         let flowId = webSkel.currentUser.space.getFlowIdByName("Chatbots");
-        return await webSkel.getService("LlmsService").callFlow(flowId, message, this.personalityId, "");
+        return await webSkel.appServices.callFlow(flowId, message, this.personalityId, "");
     }
 
     async addMessage(conversation, role, text){

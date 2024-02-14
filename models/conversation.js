@@ -1,6 +1,6 @@
 export class Conversation{
     constructor(conversationData) {
-        this.id = conversationData.id || webSkel.getService("UtilsService").generateId();
+        this.id = conversationData.id || webSkel.appServices.generateId();
         this.history = conversationData.history || [];
         this.context = conversationData.context || [];
         this.wordCount = conversationData.wordCount || 0;
