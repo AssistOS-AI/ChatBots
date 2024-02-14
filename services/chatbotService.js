@@ -18,7 +18,7 @@ export class ChatbotService {
             return;
         }
         let flowId = webSkel.currentUser.space.getFlowIdByName("SummarizeConversation");
-        let response = await webSkel.getService("LlmsService").callFlow(flowId, conversation.getContext());
+        let response = await webSkel.appServices.callFlow(flowId, conversation.getContext());
         await chatbot.addContext(conversation, response.responseString);
         conversation.wordCount = 0;
         for(let reply of conversation.context){

@@ -3,7 +3,7 @@ export class chatbotsPage {
         this.element = element;
         this.invalidate=invalidate;
         this.invalidate();
-        this.personalityId = webSkel.getService("UtilsService").parseURL();
+        this.personalityId = webSkel.appServices.parseURL();
         let appName = window.location.hash.split('/')[1];
         this.appManager = webSkel.initialisedApplications[appName].manager;
         this.incognito = false;
@@ -182,7 +182,7 @@ export class chatbotsPage {
         }
     }
     async sendMessage(_target){
-        let formInfo = await webSkel.UtilsService.extractFormInformation(_target);
+        let formInfo = await webSkel.extractFormInformation(_target);
         let input = formInfo.data.input;
         formInfo.elements.input.element.value = "";
 
@@ -190,7 +190,7 @@ export class chatbotsPage {
         this.displayMessage("user",input);
         let flowId = webSkel.currentUser.space.getFlowIdByName("Chatbots");
 
-        let response = await webSkel.getService("LlmsService").callFlow(flowId, this.chatbot, this.conversation, formInfo.data.input, this.defaultEmotion, this.personalityId, this.conversation.getContext());
+        let response = await webSkel.appServices.callFlow(flowId, this.chatbot, this.conversation, formInfo.data.input, this.defaultEmotion, this.personalityId, this.conversation.getContext());
 
         if(!response.responseJson){
             response.responseJson = {
@@ -246,7 +246,7 @@ export class chatbotsPage {
     }
 
     toggleConversations(_target, mode){
-        let parentTarget = webSkel.UtilsService.getClosestParentElement(_target, ".category");
+        let parentTarget = webSkel.getClosestParentElement(_target, ".category");
         let target = parentTarget.querySelector(".conversation-units");
         let arrow = parentTarget.querySelector("svg");
         let creationDateContainer = parentTarget.querySelector(".creation-date-container");
