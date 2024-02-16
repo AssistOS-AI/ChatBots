@@ -214,7 +214,10 @@ export class chatbotsPage {
             document.addEventListener("click", this.bindedHideHistory, {signal:controller.signal});
             _target.setAttribute("data-local-action", "showHistory on");
             let recentConversations = this.element.querySelector(".creation-date-container");
-            recentConversations.click();
+            if(recentConversations){
+                recentConversations.click();
+            }
+            //else no other conversations
         }
     }
     hideHistory(controller, button, event) {
