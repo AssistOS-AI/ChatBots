@@ -1,12 +1,13 @@
 <div class="chat-container">
     <div class="chat-log">
+        <img src="$$chatbotsBackground" alt="chat-background" class="chat-background">
         <div class="conversation">
             $$conversationHistory
         </div>
     </div>
 
     <form class="chat-input-container">
-        <label for="input" style="display: none"></label>
+        <label for="input" class="hidden"></label>
         <textarea name="input" data-id="input" id="input" placeholder="Say something... (ctrl + enter -> new line)"></textarea>
 
         <button type="button" class="send-message-btn" data-local-action="sendMessage">

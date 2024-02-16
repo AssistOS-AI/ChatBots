@@ -7,6 +7,7 @@ export class chatbotsSelectPersonalityPage {
         this.invalidate();
     }
     beforeRender() {
+        this.chatbotsBackground = `spaces/${webSkel.currentUser.space.id}/applications/ChatBots/web-components/chatbots-select-personality-page/background.png`;
         this.personalityBlocks = "";
         if (webSkel.currentUser.space.personalities.length > 0) {
             webSkel.currentUser.space.personalities.forEach((item) => {
