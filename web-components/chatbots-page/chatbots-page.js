@@ -11,7 +11,7 @@ export class chatbotsPage {
         this.defaultEmotion = {name:". . .",emoji:"&#128578;"};
     }
     beforeRender() {
-        this.chatbotsBackground = `spaces/${webSkel.currentUser.space.id}/applications/ChatBots/web-components/chatbots-page/background.png`;
+        this.chatbotsBackground = `spaces/${webSkel.currentUser.space.id}/applications/ChatBots/assets/background.png`;
         this.conversation =  this.appManager.services.get("ChatbotService").initChatbot(this.appManager, this.personalityId);
         this.chatbot = this.appManager.getChatbot(this.personalityId);
         if(this.incognito){
