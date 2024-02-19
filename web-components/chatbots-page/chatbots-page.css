@@ -10,13 +10,12 @@ chatbots-page{
     justify-content: space-between;
 }
 .chat-log{
-    height: 90%;
+    height: 88%;
     position: relative;
 }
 .chat-background{
     object-fit: cover;
     position: absolute;
-    top: 0;
     right: 0;
     bottom: 0;
     left: 0;
