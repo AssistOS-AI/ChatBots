@@ -30,19 +30,13 @@
   "presenters": [
     {
       "presenterPath": "web-components/chatbots-page/chatbots-page.js",
-      "presenterName": "chatbotsPage",
+      "presenterName": "ChatbotsPage",
       "forComponent": "chatbots-page"
     },
     {
       "presenterPath": "web-components/chatbots-select-personality-page/chatbots-select-personality-page.js",
-      "presenterName": "chatbotsSelectPersonalityPage",
+      "presenterName": "ChatbotsSelectPersonalityPage",
       "forComponent": "chatbots-select-personality-page"
-    }
-  ],
-  "services": [
-    {
-      "serviceName": "routingService",
-      "servicePath": "services/routingService.js"
     }
   ],
   "manager": {

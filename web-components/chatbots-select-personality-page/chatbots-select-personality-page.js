@@ -1,6 +1,6 @@
 import {getBasePath} from "../../utils/index.js";
 
-export class chatbotsSelectPersonalityPage {
+export class ChatbotsSelectPersonalityPage {
     constructor(element,invalidate) {
         this.element = element;
         this.invalidate=invalidate;

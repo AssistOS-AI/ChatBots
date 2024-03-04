@@ -1,4 +1,4 @@
-export class routingService {
+export class RoutingService {
     constructor() {}
     async navigateToLocation(locationArray = [], appName) {
         const CHATBOTS_SELECT_PERSONALITY_PAGE = "chatbots-select-personality-page";

@@ -1,4 +1,4 @@
-import {Conversation} from "./conversation.js";
+import {Conversation} from "./Conversation.js";
 
 export class Chatbot{
     constructor(chatbotData) {

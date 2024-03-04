@@ -1,4 +1,4 @@
-export class chatbotsPage {
+export class ChatbotsPage {
     constructor(element,invalidate) {
         this.element = element;
         this.invalidate=invalidate;
