@@ -5,39 +5,21 @@
   "entryPointComponent": "chatbots-select-personality-page",
   "components": [
     {
-      "componentName": "chatbots-select-personality-page",
-      "componentPath": "web-components/chatbots-select-personality-page/chatbots-select-personality-page.html",
-      "cssPaths": [
-        "web-components/chatbots-select-personality-page/chatbots-select-personality-page.css"
-      ]
+      "name": "chatbots-select-personality-page",
+      "presenterClassName": "chatbotsSelectPersonalityPage",
+      "type": "pages"
     },
     {
-      "componentName": "chatbots-page",
-      "componentPath": "web-components/chatbots-page/chatbots-page.html",
-      "cssPaths": [
-        "web-components/chatbots-page/chatbots-page.css"
-      ]
+      "name": "chatbots-page",
+      "presenterClassName": "chatbotsPage",
+      "type" : "pages"
     },
     {
-      "componentName": "personality-unit",
-      "componentPath": "web-components/personality-unit/personality-unit.html",
-      "cssPaths": [
-        "web-components/personality-unit/personality-unit.css"
-      ]
+      "name": "personality-unit",
+      "type": "components"
     }
   ],
-  "presenters": [
-    {
-      "presenterPath": "web-components/chatbots-page/chatbots-page.js",
-      "presenterName": "chatbotsPage",
-      "forComponent": "chatbots-page"
-    },
-    {
-      "presenterPath": "web-components/chatbots-select-personality-page/chatbots-select-personality-page.js",
-      "presenterName": "chatbotsSelectPersonalityPage",
-      "forComponent": "chatbots-select-personality-page"
-    }
-  ],
+
   "services": [
     {
       "serviceName": "routingService",
