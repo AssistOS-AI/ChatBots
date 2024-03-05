@@ -1,4 +1,4 @@
-export class chatbotsPage {
+export class ChatbotsPage {
     constructor(element,invalidate) {
         this.element = element;
         this.invalidate=invalidate;
@@ -11,6 +11,7 @@ export class chatbotsPage {
         this.defaultEmotion = {name:". . .",emoji:"&#128578;"};
     }
     beforeRender() {
+        this.chatbotsBackground = `spaces/${webSkel.currentUser.space.id}/applications/ChatBots/assets/background.png`;
         this.conversation =  this.appManager.services.get("ChatbotService").initChatbot(this.appManager, this.personalityId);
         this.chatbot = this.appManager.getChatbot(this.personalityId);
         if(this.incognito){
@@ -214,7 +215,10 @@ export class chatbotsPage {
             document.addEventListener("click", this.bindedHideHistory, {signal:controller.signal});
             _target.setAttribute("data-local-action", "showHistory on");
             let recentConversations = this.element.querySelector(".creation-date-container");
-            recentConversations.click();
+            if(recentConversations){
+                recentConversations.click();
+            }
+            //else no other conversations
         }
     }
     hideHistory(controller, button, event) {

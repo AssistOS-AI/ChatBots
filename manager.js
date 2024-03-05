@@ -1,17 +1,16 @@
-import {routingService} from "./services/routingService.js";
-import {ChatbotService} from "./services/chatbotService.js";
-import {Chatbot} from "./models/chatbot.js";
-import {Conversation} from "./models/conversation.js";
+import {RoutingService} from "./services/RoutingService.js";
+import {ChatbotService} from "./services/ChatbotService.js";
+import {Chatbot} from "./models/Chatbot.js";
 
 export class Manager {
     constructor(appName) {
         this.app = webSkel.currentUser.space.getApplicationByName(appName);
         this.services = new Map();
-        this.services.set('routingService', new routingService());
+        this.services.set('RoutingService', new RoutingService());
         this.services.set('ChatbotService', new ChatbotService());
     }
     async navigateToLocation(location) {
-        this.services.get('routingService').navigateToLocation(location, this.app.name);
+        this.services.get('RoutingService').navigateToLocation(location, this.app.name);
     }
     async loadAppData(){
         let bots = JSON.parse(await storageManager.loadAppObjects(this.app.name, "data"));

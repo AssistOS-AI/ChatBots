@@ -1,12 +1,13 @@
 import {getBasePath} from "../../utils/index.js";
 
-export class chatbotsSelectPersonalityPage {
+export class ChatbotsSelectPersonalityPage {
     constructor(element,invalidate) {
         this.element = element;
         this.invalidate=invalidate;
         this.invalidate();
     }
     beforeRender() {
+        this.chatbotsBackground = `spaces/${webSkel.currentUser.space.id}/applications/ChatBots/assets/background.png`;
         this.personalityBlocks = "";
         if (webSkel.currentUser.space.personalities.length > 0) {
             webSkel.currentUser.space.personalities.forEach((item) => {

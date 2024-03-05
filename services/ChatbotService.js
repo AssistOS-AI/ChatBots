@@ -1,4 +1,4 @@
-import {Chatbot} from "../models/chatbot.js";
+import {Chatbot} from "../models/Chatbot.js";
 
 export class ChatbotService {
     constructor() {

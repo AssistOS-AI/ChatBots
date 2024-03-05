@@ -10,19 +10,16 @@ chatbots-page{
     justify-content: space-between;
 }
 .chat-log{
-    height: 90%;
+    height: 88%;
     position: relative;
 }
-.chat-log::before {
-    content: "";
-    background-image: url('background.png');
-    background-size: cover;
+.chat-background{
+    object-fit: cover;
     position: absolute;
-    top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    opacity: 1;
+    z-index: -1;
 }
 .conversation{
     position: relative;
@@ -61,6 +58,7 @@ chatbots-page{
 }
 
 .right-sidebar{
+    background-color: white;
     padding: 15px;
     display: flex;
     flex-direction: column;
@@ -102,7 +100,7 @@ chatbots-page{
     100% { opacity: 1; }
 }
 .emotion-name{
-    line-height: 24px;
+    line-height: 40px;
     text-align: center;
     font-weight: 600;
     font-size: 32px;
