@@ -6,12 +6,12 @@
   "components": [
     {
       "name": "chatbots-select-personality-page",
-      "presenterClassName": "chatbotsSelectPersonalityPage",
+      "presenterClassName": "ChatbotsSelectPersonalityPage",
       "type": "pages"
     },
     {
       "name": "chatbots-page",
-      "presenterClassName": "chatbotsPage",
+      "presenterClassName": "ChatbotsPage",
       "type" : "pages"
     },
     {
@@ -22,8 +22,8 @@
 
   "services": [
     {
-      "serviceName": "routingService",
-      "servicePath": "services/routingService.js"
+      "serviceName": "RoutingService",
+      "servicePath": "services/RoutingService.js"
     }
   ],
   "manager": {
