@@ -11,7 +11,7 @@ export class ChatbotsSelectPersonalityPage {
         this.personalityBlocks = "";
         if (webSkel.currentUser.space.personalities.length > 0) {
             webSkel.currentUser.space.personalities.forEach((item) => {
-                this.personalityBlocks += `<personality-unit data-name="${item.name}" data-description="${item.description}" data-id="${item.id}" data-image="${item.image}"></personality-unit>`;
+                this.personalityBlocks += `<personality-unit data-name="${item.name}" data-description="${item.description}" data-id="${item.id}" data-image="${item.image || "../../wallet/assets/images/default-personality.png"}"></personality-unit>`;
             });
         }else {
             this.personalityBlocks = `<div class="no-personality">No personality defined</div>`;
