@@ -3,7 +3,7 @@ export class ChatbotsPage {
         this.element = element;
         this.invalidate=invalidate;
         this.invalidate();
-        this.personalityId = webSkel.appServices.parseURL();
+        this.personalityId = window.location.hash.split("/")[3];
         let appName = window.location.hash.split('/')[1];
         this.appManager = webSkel.initialisedApplications[appName].manager;
         this.incognito = false;
