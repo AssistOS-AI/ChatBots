@@ -5,7 +5,7 @@ export class Chatbot{
         this.openers = chatbotData.openers || [];
         this.conversations = (chatbotData.conversations || [{}]).map(conversationData => new Conversation(conversationData));
         this.personalityId = chatbotData.personalityId;
-        this.name = webSkel.currentUser.space.getPersonality(this.personalityId).name;
+        this.name = system.space.getPersonality(this.personalityId).name;
         this.currentConversationId = chatbotData.currentConversationId || "";
     }
 
@@ -14,7 +14,7 @@ export class Chatbot{
     }
     async setOpeners(openers){
         this.openers = openers;
-        await storageManager.storeObject(webSkel.currentUser.space.id, "status", "status", JSON.stringify(webSkel.currentUser.space.getSpaceStatus(),null,2));
+        await system.storage.storeObject(system.space.id, "status", "status", JSON.stringify(system.space.getSpaceStatus(),null,2));
     }
     getRandomOpener(){
         let random = Math.floor(Math.random() * this.openers.length);
@@ -35,24 +35,24 @@ export class Chatbot{
     async addConversation(){
         let conversation = new Conversation({})
         this.conversations.push(conversation);
-        await storageManager.storeAppObject(webSkel.currentApplicationName, "data", this.getFileName(), JSON.stringify(this));
+        await system.storage.storeAppObject(system.currentApplicationName, "data", this.getFileName(), JSON.stringify(this));
         return conversation.id;
     }
 
     async createOpener(){
         let message = "Hello!";
-        let flowId = webSkel.currentUser.space.getFlowIdByName("Chatbots");
-        return await webSkel.appServices.callFlow(flowId, message, this.personalityId, "");
+        let flowId = system.space.getFlowIdByName("Chatbots");
+        return await system.services.callFlow(flowId, message, this.personalityId, "");
     }
 
     async addMessage(conversation, role, text){
         conversation.setLastInteraction();
         conversation.addMessage(role, text);
-        await storageManager.storeAppObject(webSkel.currentApplicationName, "data", this.getFileName(), JSON.stringify(this));
+        await system.storage.storeAppObject(system.currentApplicationName, "data", this.getFileName(), JSON.stringify(this));
     }
 
     async addContext(conversation, context){
         conversation.addContext(context);
-        await storageManager.storeAppObject(webSkel.currentApplicationName, "data", this.getFileName(), JSON.stringify(this));
+        await system.storage.storeAppObject(system.currentApplicationName, "data", this.getFileName(), JSON.stringify(this));
     }
 }

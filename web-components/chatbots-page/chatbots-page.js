@@ -5,13 +5,13 @@ export class ChatbotsPage {
         this.invalidate();
         this.personalityId = window.location.hash.split("/")[3];
         let appName = window.location.hash.split('/')[1];
-        this.appManager = webSkel.initialisedApplications[appName].manager;
+        this.appManager = system.initialisedApplications[appName].manager;
         this.incognito = false;
         this.incognitoConversation = {history:[],currentEmotion:{name:". . .",emoji:"&#128578;"}};
         this.defaultEmotion = {name:". . .",emoji:"&#128578;"};
     }
     beforeRender() {
-        this.chatbotsBackground = `spaces/${webSkel.currentUser.space.id}/applications/ChatBots/assets/background.png`;
+        this.chatbotsBackground = `spaces/${system.space.id}/applications/ChatBots/assets/background.png`;
         this.conversation =  this.appManager.services.get("ChatbotService").initChatbot(this.appManager, this.personalityId);
         this.chatbot = this.appManager.getChatbot(this.personalityId);
         if(this.incognito){
@@ -183,15 +183,15 @@ export class ChatbotsPage {
         }
     }
     async sendMessage(_target){
-        let formInfo = await webSkel.extractFormInformation(_target);
+        let formInfo = await system.UI.extractFormInformation(_target);
         let input = formInfo.data.input;
         formInfo.elements.input.element.value = "";
 
         this.displayEmotion(this.defaultEmotion);
         this.displayMessage("user",input);
-        let flowId = webSkel.currentUser.space.getFlowIdByName("Chatbots");
+        let flowId = system.space.getFlowIdByName("Chatbots");
 
-        let response = await webSkel.appServices.callFlow(flowId, this.chatbot, this.conversation, formInfo.data.input, this.defaultEmotion, this.personalityId, this.conversation.getContext());
+        let response = await system.services.callFlow(flowId, this.chatbot, this.conversation, formInfo.data.input, this.defaultEmotion, this.personalityId, this.conversation.getContext());
 
         if(!response.responseJson){
             response.responseJson = {
@@ -250,7 +250,7 @@ export class ChatbotsPage {
     }
 
     toggleConversations(_target, mode){
-        let parentTarget = webSkel.getClosestParentElement(_target, ".category");
+        let parentTarget = system.UI.getClosestParentElement(_target, ".category");
         let target = parentTarget.querySelector(".conversation-units");
         let arrow = parentTarget.querySelector("svg");
         let creationDateContainer = parentTarget.querySelector(".creation-date-container");

@@ -1,6 +1,6 @@
 export class Conversation{
     constructor(conversationData) {
-        this.id = conversationData.id || webSkel.appServices.generateId();
+        this.id = conversationData.id || system.services.generateId();
         this.history = conversationData.history || [];
         this.context = conversationData.context || [];
         this.wordCount = conversationData.wordCount || 0;
@@ -26,7 +26,7 @@ export class Conversation{
         this.history = [];
         this.wordCount = 0;
         this.context= [];
-        await storageManager.storeObject(webSkel.currentUser.space.id, "status", "status", JSON.stringify(webSkel.currentUser.space.getSpaceStatus(),null,2));
+        await system.storage.storeObject(system.space.id, "status", "status", JSON.stringify(system.space.getSpaceStatus(),null,2));
     }
 
     async addContext(context){

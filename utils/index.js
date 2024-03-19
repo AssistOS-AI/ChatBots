@@ -8,5 +8,5 @@ export function getAppName(){
     return url[1];
 }
 export function getBasePath(){
-    return `${webSkel.currentUser.space.id}`+`/`+`${getAppName()}`;
+    return `${system.space.id}`+`/`+`${getAppName()}`;
 }

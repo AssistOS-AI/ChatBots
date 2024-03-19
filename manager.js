@@ -4,7 +4,7 @@ import {Chatbot} from "./models/Chatbot.js";
 
 export class Manager {
     constructor(appName) {
-        this.app = webSkel.currentUser.space.getApplicationByName(appName);
+        this.app = system.space.getApplicationByName(appName);
         this.services = new Map();
         this.services.set('RoutingService', new RoutingService());
         this.services.set('ChatbotService', new ChatbotService());
@@ -13,7 +13,7 @@ export class Manager {
         this.services.get('RoutingService').navigateToLocation(location, this.app.name);
     }
     async loadAppData(){
-        let bots = JSON.parse(await storageManager.loadAppObjects(this.app.name, "data"));
+        let bots = JSON.parse(await system.storage.loadAppObjects(this.app.name, "data"));
         this.app.bots = [];
         for(let botData of bots){
             this.app.bots.push(new Chatbot(botData));

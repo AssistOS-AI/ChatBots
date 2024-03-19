@@ -7,10 +7,10 @@ export class ChatbotsSelectPersonalityPage {
         this.invalidate();
     }
     beforeRender() {
-        this.chatbotsBackground = `spaces/${webSkel.currentUser.space.id}/applications/ChatBots/assets/background.png`;
+        this.chatbotsBackground = `spaces/${system.space.id}/applications/ChatBots/assets/background.png`;
         this.personalityBlocks = "";
-        if (webSkel.currentUser.space.personalities.length > 0) {
-            webSkel.currentUser.space.personalities.forEach((item) => {
+        if (system.space.personalities.length > 0) {
+            system.space.personalities.forEach((item) => {
                 this.personalityBlocks += `<personality-unit data-name="${item.name}" data-description="${item.description}" data-id="${item.id}" data-image="${item.image || "../../wallet/assets/images/default-personality.png"}"></personality-unit>`;
             });
         }else {
@@ -19,8 +19,8 @@ export class ChatbotsSelectPersonalityPage {
     }
 
     async selectPersonality(_target){
-        let personality = webSkel.reverseQuerySelector(_target,"personality-unit");
+        let personality = system.UI.reverseQuerySelector(_target,"personality-unit");
         let personalityId = personality.getAttribute("data-id");
-        await webSkel.changeToDynamicPage("chatbots-page", `${getBasePath()}/chatbots-page/${personalityId}`);
+        await system.UI.changeToDynamicPage("chatbots-page", `${getBasePath()}/chatbots-page/${personalityId}`);
     }
 }
