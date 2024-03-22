@@ -18,8 +18,11 @@ export class ChatbotService {
             return;
         }
         let flowId = system.space.getFlowIdByName("SummarizeConversation");
-        let response = await system.services.callFlow(flowId, conversation.getContext());
-        await chatbot.addContext(conversation, response.responseString);
+        let context = {
+            replyHistory: conversation.getContext()
+        }
+        let response = await system.services.callFlow(flowId, context);
+        await chatbot.addContext(conversation, response);
         conversation.wordCount = 0;
         for(let reply of conversation.context){
             let words = reply.content.split(" ");

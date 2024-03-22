@@ -190,19 +190,25 @@ export class ChatbotsPage {
         this.displayEmotion(this.defaultEmotion);
         this.displayMessage("user",input);
         let flowId = system.space.getFlowIdByName("Chatbots");
+        let context = {
+            chatbotObj:this.chatbot,
+            conversation: this.conversation,
+            userPrompt: formInfo.data.input,
+            emotion: this.defaultEmotion,
+            replyHistory: this.conversation.getContext()
+        }
+        let response = await system.services.callFlow(flowId, context, this.personalityId);
 
-        let response = await system.services.callFlow(flowId, this.chatbot, this.conversation, formInfo.data.input, this.defaultEmotion, this.personalityId, this.conversation.getContext());
-
-        if(!response.responseJson){
-            response.responseJson = {
+        if(!response){
+            response = {
                 reply:"I'm sorry, I didn't understand what you said. Please repeat.",
                 emotion:{name:"Confused",emoji:"&#128533;"}
             };
         }
-        await this.storeConversationData("assistant", response.responseJson.reply, response.responseJson.emotion);
+        await this.storeConversationData("assistant", response.reply, response.emotion);
         await this.appManager.services.get("ChatbotService").summarizeConversation(this.chatbot, this.conversation);
-        this.displayEmotion(response.responseJson.emotion);
-        this.displayMessage("assistant", response.responseJson.reply);
+        this.displayEmotion(response.emotion);
+        this.displayMessage("assistant", response.reply);
 
     }
 

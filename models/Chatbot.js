@@ -38,7 +38,7 @@ export class Chatbot{
         await system.storage.storeAppObject(system.currentApplicationName, "data", this.getFileName(), JSON.stringify(this));
         return conversation.id;
     }
-
+    //TBD
     async createOpener(){
         let message = "Hello!";
         let flowId = system.space.getFlowIdByName("Chatbots");
