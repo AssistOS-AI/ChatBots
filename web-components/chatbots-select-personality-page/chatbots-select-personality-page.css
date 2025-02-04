@@ -1,0 +1,42 @@
+.page-body{
+    position: relative;
+}
+.bots-background{
+    z-index: -1;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+}
+.chatbots-header{
+    padding: 20px 40px;
+    font-weight: 600;
+    font-size: 28px;
+    color:  var(--left-sidebar);
+    box-shadow: 0 2px 4px 0 var(--chatbots-shadow);
+}
+.choose-personality{
+    padding: 25px 25px 0 40px;
+    font-size: 20px;
+    font-weight: 600;
+}
+.table{
+    padding: 0 15px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+personality-unit{
+    padding: 25px;
+}
+.text{
+    font-weight: 500;
+    font-size: 22px;
+}
+.no-personality{
+    margin: 25px;
+    color: var(--red);
+    width: 200px;
+}
